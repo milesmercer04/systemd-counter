@@ -7,9 +7,11 @@ Description=Simple counter progam that logs an increasing value every second.
 
 [Service]
 Type=simple
-User=mmercer
-WorkingDirectory=/home/mmercer/dev/334/systemd-counter/bin/
-ExecStart=/home/mmercer/dev/334/systemd-counter/bin/count
+User=counter
+Group=counter
+WorkingDirectory=/opt/counter/
+ExecStart=/opt/counter/bin/count
+Restart=always
 
 [Install]
 WantedBy=multi-user.target
