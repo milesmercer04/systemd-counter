@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring>
 #include <fstream>
 #include <unistd.h>
 #include <csignal>
@@ -33,6 +34,7 @@ int main() {
     file << name << ": ";
     current_time = time(nullptr);
     date_time = ctime(&current_time);
+    date_time[strcspn(date_time, "\n")] = '\0';
     file << date_time << " #" << count++ << endl;
     sleep(1);
   }
@@ -50,6 +52,7 @@ void signal_handler(int signum) {
   file << name << ": ";
   time_t current_time = time(nullptr);
   char* date_time = ctime(&current_time);
+  date_time[strcspn(date_time, "\n")] = '\0';
   file << date_time << " Received SIGTERM, exiting" << endl << flush; // Force STDOUT flush
 
   // Close the output file and exit the program
