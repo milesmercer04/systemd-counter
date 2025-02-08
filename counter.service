@@ -1,3 +1,14 @@
-# This is the systemd service file that you'll need to configure and install in the /lib/systemd/system/ directory so that systemd will know you to launch/start/stop your counter service.
+# This is the systemd service file that you'll need to configure and install in the
+# /lib/systemd/system/ directory so that systemd will know you to launch/start/stop your counter
+# service.
 
+[Unit]
+Description=Simple counter progam that logs an increasing value every second.
 
+[Service]
+User=mmercer
+WorkingDirectory=/home/mmercer/dev/334/systemd-counter/bin/
+ExecStart=/home/mmercer/dev/334/systemd-counter/bin/count
+
+[Install]
+WantedBy=multi-user.target
