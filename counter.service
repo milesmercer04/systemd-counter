@@ -6,6 +6,7 @@
 Description=Simple counter progam that logs an increasing value every second.
 
 [Service]
+Type=simple
 User=mmercer
 WorkingDirectory=/home/mmercer/dev/334/systemd-counter/bin/
 ExecStart=/home/mmercer/dev/334/systemd-counter/bin/count
