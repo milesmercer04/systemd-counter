@@ -18,10 +18,13 @@ build-deb: build
 	rm -rf build
 	mkdir -p build build/bin build/etc build/DEBIAN
 	cp bin/count build/bin/
+	strip build/bin/count
 	echo "NAME=Miles" > build/etc/count.conf
 	echo "/etc/count.conf" > build/DEBIAN/conffiles
-	cp conf/control build/DEBIAN/control
+	cp conf/* build/DEBIAN/
+	chmod 755 build/DEBIAN/postinst build/DEBIAN/prerm build/DEBIAN/postrm
 	dpkg-deb --root-owner-group --build build
 	mv build.deb counter-v2.0.0.deb
 
-lint-deb:
+lint-deb: build-deb
+	lintian counter-v2.0.0.deb

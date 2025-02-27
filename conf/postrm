@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Disable the counter service so it doesn't start on reboot
+systemctl disable counter.service
+
+# Remove the counter user
+userdel counter

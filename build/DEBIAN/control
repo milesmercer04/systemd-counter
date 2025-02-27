@@ -1,8 +1,0 @@
-Package: counter
-Version: 2.0.0
-Depends: libc6 (>= 2.31), libstdc++6 (>= 10.2), libgcc-s1 (>= 10), make
-Section: utils
-Priority: optional
-Architecture: all
-Maintainer: Miles Mercer <mmercer3@zagmail.gonzaga.edu>
-Description: Simple counter program to test Debian package creation
