@@ -1,26 +1,18 @@
-#include <iostream>
-#include <cstring>
-#include <fstream>
-#include <unistd.h>
-#include <csignal>
-#include <ctime>
+
+#include "count.h"
 
 using namespace std;
 
 // Global file stream, opened by main, closed by signal handler
 ofstream file;
 
-// User's name, defined globally so signal handler can access
-string name = "Miles";
-
-void signal_handler(int signum);
-
+#ifndef UNIT_TEST
 int main() {
   // Register signal handler for SIGTERM signal
   signal(SIGTERM, signal_handler);
 
   // Open output file stream
-  file.open("/tmp/currentCount.out");
+  file.open(OUT_FILE);
 
   // Make a counter variable
   int count = 0;
@@ -31,16 +23,14 @@ int main() {
 
   // Until program is terminated, print name, date-time, and counter every second
   while (true) {
-    file << name << ": ";
     current_time = time(nullptr);
-    date_time = ctime(&current_time);
-    date_time[strcspn(date_time, "\n")] = '\0';
-    file << date_time << " #" << count++ << endl;
+    file << output_time(current_time, count++) << endl;
     sleep(1);
   }
 
   return 0;
 }
+#endif
 
 // ***************************************************************
 // Function: signal_handler()
@@ -49,13 +39,34 @@ int main() {
 // ***************************************************************
 void signal_handler(int signum) {
   // Print SIGTERM message
-  file << name << ": ";
   time_t current_time = time(nullptr);
-  char* date_time = ctime(&current_time);
-  date_time[strcspn(date_time, "\n")] = '\0';
-  file << date_time << " Received SIGTERM, exiting" << endl << flush; // Force STDOUT flush
+  file << output_termination(current_time) << endl << flush; // Force STDOUT flush
 
   // Close the output file and exit the program
   file.close();
   exit(143); // Exit status for SIGTERM
+}
+
+// ***********************************************************************
+// Function: output_time()
+// Description: Returns message to output based on current time and count
+// Input: Current time as a time_t type object and current count as an int
+// Returns: The string message to print to the output file
+// ***********************************************************************
+string output_time(time_t current_time, int count) {
+  char* date_time = ctime(&current_time);
+  date_time[strcspn(date_time, "\n")] = '\0';
+  return NAME + string(": ") + date_time + string(" #") + to_string(count);
+}
+
+// ***********************************************************************
+// Function: output_termination()
+// Description: Returns message to print upon receiving termination signal
+// Input: The current time as a time_t type object
+// Returns: The string message to print to the output file
+// ***********************************************************************
+string output_termination(time_t current_time) {
+  char* date_time = ctime(&current_time);
+  date_time[strcspn(date_time, "\n")] = '\0';
+  return NAME + string(": ") + date_time + " Received SIGTERM, exiting";
 }

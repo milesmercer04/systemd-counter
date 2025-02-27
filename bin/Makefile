@@ -5,3 +5,7 @@ count: count.cpp
 
 clean:
 	rm count
+
+test: count_test.cpp
+	g++ count_test.cpp -o count_test
+	./count_test
