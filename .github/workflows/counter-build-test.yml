@@ -47,8 +47,8 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Install build tools
-        run: sudo apt install -y binutils dpkg
+      # - name: Install build tools
+      #   run: sudo apt install -y binutils dpkg
 
       - name: Build deb package
         run: make -j$(nproc) build-deb
