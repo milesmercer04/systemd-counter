@@ -42,7 +42,7 @@ jobs:
         run: make -j$(nproc) test
 
   build-deb:
-    needs: [build, test]
+    needs: test
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:
@@ -72,3 +72,22 @@ jobs:
         with:
           name: counter-deb-package
           path: counter-v2.0.0.deb
+
+  lint-deb:
+    needs: build-deb
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt update && sudo apt install lintian
+
+      - name: Download deb package artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: counter-deb-package
+
+      - name: Lint counter deb package
+        run: make -j$(nproc) lint-deb
