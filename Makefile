@@ -5,7 +5,7 @@ test:
 	g++ -o bin/count_test -DUNIT_TEST bin/count.cpp bin/count_test.cpp -lgtest -lgtest_main -pthread
 	bin/count_test
 
-clean: build
+clean:
 	rm -f bin/count
 	rm -f bin/count_test
 	rm -rf build
