@@ -26,5 +26,5 @@ build-deb: build test
 	dpkg-deb --root-owner-group --build build
 	mv build.deb counter-v2.0.0.deb
 
-lint-deb: build-deb
+lint-deb:
 	-lintian counter-v2.0.0.deb
