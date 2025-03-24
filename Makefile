@@ -14,7 +14,7 @@ clean:
 run: build
 	bin/count
 
-build-deb: build
+build-deb: build test
 	rm -rf build
 	mkdir -p build build/bin build/etc build/DEBIAN
 	cp bin/count build/bin/
