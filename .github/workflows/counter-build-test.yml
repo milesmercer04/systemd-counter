@@ -1,0 +1,41 @@
+name: Counter Build Test
+run-name: ${{ github.actor }} is testing out Counter Build 🚀
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      
+      - name: Install g++
+        run: sudo apt update && sudo apt install -y g++
+
+      - name: Build project
+        run: make build
+
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y g++ cmake make
+      
+      - name: Install Google Test
+        run: |
+          git clone https://github.com/google/googletest.git
+          cd googletest
+          mkdir build && cd build
+          cmake ..
+          make -j$(nproc)
+          sudo make install
+          cd ..
+
+      - name: Run tests
+        run: make test
