@@ -1,5 +1,5 @@
 name: Counter Self-Hosted Build Test
-run-name: ${{ github.actor }} is testing out Counter Build 🚀
+run-name: ${{ github.actor }} is testing out Counter Self-Hosted Build 🚀
 on: [push]
 jobs:
   build:
@@ -82,7 +82,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: sudo apt update && sudo apt install lintian make
+        run: sudo apt update && sudo apt install -y lintian make
 
       - name: Download deb package artifact
         uses: actions/download-artifact@v4
