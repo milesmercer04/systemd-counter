@@ -1,0 +1,93 @@
+name: Counter Build Test
+run-name: ${{ github.actor }} is testing out Counter Build 🚀
+on: [push]
+jobs:
+  build:
+    runs-on: [self-hosted, linux, CPSC334]
+    timeout-minutes: 2
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      
+      - name: Install g++
+        run: sudo apt update && sudo apt install -y g++
+
+      - name: Build project
+        run: make -j$(nproc) build
+
+  test:
+    needs: build
+    runs-on: [self-hosted, linux, CPSC334]
+    timeout-minutes: 2
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y g++ cmake make
+      
+      - name: Install Google Test
+        run: |
+          git clone https://github.com/google/googletest.git
+          cd googletest
+          mkdir build && cd build
+          cmake ..
+          make -j$(nproc)
+          sudo make -j$(nproc) install
+          cd ..
+
+      - name: Run tests
+        run: make -j$(nproc) test
+
+  build-deb:
+    needs: test
+    runs-on: [self-hosted, linux, CPSC334]
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y g++ cmake make binutils dpkg
+
+      - name: Install Google Test
+        run: |
+          git clone https://github.com/google/googletest.git
+          cd googletest
+          mkdir build && cd build
+          cmake ..
+          make -j$(nproc)
+          sudo make -j$(nproc) install
+          cd ..
+
+      - name: Build deb package
+        run: make -j$(nproc) build-deb
+
+      - name: Archive deb package
+        uses: actions/upload-artifact@v4
+        with:
+          name: counter-deb-package
+          path: counter-v2.0.0.deb
+
+  lint-deb:
+    needs: build-deb
+    runs-on: [self-hosted, linux, CPSC334]
+    timeout-minutes: 2
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt update && sudo apt install lintian
+
+      - name: Download deb package artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: counter-deb-package
+
+      - name: Lint counter deb package
+        run: make -j$(nproc) lint-deb
