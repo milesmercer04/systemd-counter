@@ -1,5 +1,5 @@
-name: Counter Self-Hosted Build Test
-run-name: ${{ github.actor }} is testing out Counter Self-Hosted Build 🚀
+name: Counter Self-Hosted VM Deployment
+run-name: ${{ github.actor }} is testing out Counter Self-Hosted VM Deployment 🚀
 on:
   push:
     tags:
@@ -114,7 +114,7 @@ jobs:
           host: ${{ secrets.COUNTER_IP }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
-          source: "/home/${{ secrets.USERNAME }}/counter-v*.deb"
+          source: "/home/${{ secrets.USERNAME }}/counter-v2.0.0.deb"
           target: "/home/${{ secrets.USERNAME }}"
 
       - name: Build package on counter vm
@@ -123,4 +123,4 @@ jobs:
           host: ${{ secrets.COUNTER_IP }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
-          script: dpkg -i counter-v*.deb
+          script: dpkg -i counter-v2.0.0.deb
