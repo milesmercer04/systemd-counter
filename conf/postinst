@@ -1,11 +1,18 @@
 #!/bin/bash
 set -ex
 
+echo "=== Running postinst ==="
+
 # Create the 'counter' system user if it doesn't exist
 if ! id "counter" &>/dev/null
 then
 	adduser --system --no-create-home --home /nonexistent --disabled-login --group counter
 fi
+
+echo "Listing /lib/systemd/system:"
+ls -l /lib/systemd/system
+
+echo "Reloading systemd and enabling service..."
 
 # Reload systemd
 systemctl daemon-reexec
@@ -16,3 +23,5 @@ systemctl enable counter.service
 
 # Start the counter service immediately
 systemctl start counter.service
+W: counter: no-manual-page [bin/count]
+16
