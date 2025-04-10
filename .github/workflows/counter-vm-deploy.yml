@@ -70,6 +70,9 @@ jobs:
       - name: Build deb package
         run: make -j$(nproc) build-deb
 
+      - name: Verify counter.service exists
+        run: dpkg-deb -c counter-v2.0.0.deb | grep counter.service
+
       - name: Archive deb package
         uses: actions/upload-artifact@v4
         with:
