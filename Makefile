@@ -16,11 +16,12 @@ run: build
 
 build-deb: build test
 	rm -rf build
-	mkdir -p build build/bin build/etc build/DEBIAN
+	mkdir -p build build/bin build/etc build/DEBIAN build/lib/systemd/system
 	cp bin/count build/bin/
 	strip build/bin/count
 	echo "NAME=Miles" > build/etc/count.conf
 	echo "/etc/count.conf" > build/DEBIAN/conffiles
+	cp counter.service build/lib/systemd/system/
 	cp conf/* build/DEBIAN/
 	chmod 755 build/DEBIAN/postinst build/DEBIAN/prerm build/DEBIAN/postrm
 	dpkg-deb --root-owner-group --build build
