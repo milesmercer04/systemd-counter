@@ -124,4 +124,6 @@ jobs:
           host: ${{ secrets.COUNTER_IP }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
-          script: sudo dpkg -i /home/${{ secrets.USERNAME }}/downloads/counter-v2.0.0.deb
+          script: |
+            sudo apt update
+            sudo apt install -y /home/${{ secrets.USERNAME }}/downloads/counter-v2.0.0.deb
