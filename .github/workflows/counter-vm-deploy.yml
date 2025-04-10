@@ -128,6 +128,10 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           script: | # vm apt cannot resolve make dependency on its own
+            sudo dpkg --remove --force-all counter
+            sudo rm -f /lib/systemd/system/counter.service
+            sudo rm -f /etc/count.conf
+            sudo systemctl daemon-reexec
             sudo apt update
             sudo apt install -y make
             sudo apt install -y /home/${{ secrets.USERNAME }}/downloads/counter-v2.0.0.deb

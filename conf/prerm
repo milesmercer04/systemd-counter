@@ -1,4 +1,6 @@
 #!/bin/bash
 
 # Stop the counter service
-systemctl stop counter.service
+if systemctl list-units --full -all | grep -q "^counter.service"; then
+  systemctl stop counter.service
+fi
