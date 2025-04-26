@@ -15,16 +15,21 @@ echo "Listing /lib/systemd/system:" >&2
 ls -l /lib/systemd/system >&2
 
 if [[ -f "$SERVICE_FILE" ]]; then
-	echo "Reloading systemd and enabling service..." >&2
+	if command -v systemctl &>/dev/null && pidof systemd &>/dev/null; then
+		echo "Reloading systemd and enabling service..." >&2
 
-	# Reload systemd
-	systemctl daemon-reexec
-	systemctl daemon-reload
+		# Reload systemd
+		systemctl daemon-reexec
+		systemctl daemon-reload
 
-	# Enable the counter service to start on boot
-	systemctl enable counter.service
+		# Enable the counter service to start on boot
+		systemctl enable counter.service
 
-	# Start the counter service immediately
-	systemctl start counter.service
+		# Start the counter service immediately
+		systemctl start counter.service
+	else
+		echo "Skipping systemctl commands since systemd is not running."
+	fi
 else
 	echo "WARNING: $SERVICE_FILE not found. Skipping systemctl enable/start" >&2
+fi
