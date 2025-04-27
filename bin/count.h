@@ -9,7 +9,7 @@
 
 // Global variables
 #define NAME "Miles"
-#define OUT_FILE "/tmp/currentCount.out"
+#define OUT_FILE "/tmp/count/currentCount.out"
 
 // Functions defined in count.cpp
 void signal_handler(int signum);

@@ -10,6 +10,9 @@ clean:
 	rm -f bin/count_test
 	rm -rf build
 	rm -f counter-v2.0.0.deb
+	-docker rmi counter:latest
+	docker system prune -f
+	rm -rf /tmp/count/
 
 run: build
 	bin/count
@@ -29,3 +32,11 @@ build-deb: build test
 
 lint-deb:
 	-lintian counter-v2.0.0.deb
+
+docker-image:
+	docker build -t counter:latest .
+
+docker-run: docker-image
+	[ -d /tmp/count ] || mkdir -p /tmp/count/
+	chmod 1777 /tmp/count/
+	docker run --rm -it --mount type=bind,source=/tmp/count,dst=/tmp/count counter:latest

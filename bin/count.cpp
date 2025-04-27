@@ -14,6 +14,12 @@ int main() {
   // Open output file stream
   file.open(OUT_FILE);
 
+  // Verify file open
+  if (!file.is_open()) {
+    cerr << "Failed to open " << OUT_FILE << endl << flush;
+    return 1;
+  }
+
   // Make a counter variable
   int count = 0;
 
@@ -24,7 +30,7 @@ int main() {
   // Until program is terminated, print name, date-time, and counter every second
   while (true) {
     current_time = time(nullptr);
-    file << output_time(current_time, count++) << endl;
+    file << output_time(current_time, count++) << endl << flush;
     sleep(1);
   }
 

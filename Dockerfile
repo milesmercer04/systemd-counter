@@ -17,6 +17,10 @@ RUN git clone https://github.com/google/googletest.git && \
 RUN make -j$(nproc) build-deb && \
   dpkg -i counter-v2.0.0.deb || true
 
+# Make /tmp/count directory
+RUN mkdir /tmp/count && \
+  chmod 1777 /tmp/count
+
 CMD ["/bin/count"]
 
 EXPOSE 3000
